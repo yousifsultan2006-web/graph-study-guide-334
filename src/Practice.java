@@ -28,26 +28,29 @@ public class Practice {
   public static int oddVertices(Vertex<Integer> starting) {
     Set<Vertex<Integer>> visited = new HashSet<>();
     int oddCount = 0;
-
-
-    return 0;
+    return oddCount += oddVertices(starting, visited);
+    
   }
 
-  private static void oddVertices(Vertex<Integer> current,  Set<Vertex<Integer>> visited ) {
+  private static int oddVertices(Vertex<Integer> current,  Set<Vertex<Integer>> visited) {
+    int oddCount = 0;
 
-    if(visited.contains(current) ) {
-      return;
+    if(current == null || visited.contains(current) ) {
+      return 0;
     }
-
     visited.add(current);
 
+    
+    if (current.data % 2 != 0) {
+      oddCount++;
+    }
+
     for (Vertex<Integer> neighbor : current.neighbors) {
-      oddVertices(neighbor, visited);
-      if (neighbor.data % 2 == 1) {
-        
-      }
+      oddCount += oddVertices(neighbor, visited);
+      
 
     }
+    return oddCount;
 
 
   }
