@@ -231,10 +231,28 @@ if (connectionV1 == true && connectionV2 == true) {
    * @param companyName the name of the company to check for employment
    * @return true if a person in the extended network works at the specified company, false otherwise
    */
+
   public static boolean hasExtendedConnectionAtCompany(Professional person, String companyName) {
-    return false;
+    if(person == null) return false;
+    Set<Professional> visited = new HashSet<>();
+    
+    return hasConnection(visited, person, companyName);
   }
 
+  private static boolean hasConnection(Set<Professional> visited, Professional current, String companyName) {
+    if(current == null) return false;
+    if(current.getCompany().equals(companyName)) return true;
+    if(visited.contains(current)) return false;
+    visited.add(current);
+
+    for(Professional connection : current.getConnections()) {
+      if(hasConnection(visited, connection, companyName)) return true;
+    }
+
+    return false;
+
+    
+  }
   /**
    * Returns a list of possible next moves starting from a given position.
    * 
@@ -303,6 +321,20 @@ if (connectionV1 == true && connectionV2 == true) {
    * @return an unsorted list of next moves
    */
   public static List<int[]> nextMoves(char[][] board, int[] current, int[][] directions) {
-    return null;
+
+    List<int[]> moves = new ArrayList<>();
+
+    for(int[] direction : directions) {
+
+      int row = current[0] + direction[0];
+      int col = current[1] + direction[1];
+
+      if(row < 0 || row >= board.length || col < 0 || col >= board[0].length || board[row][col] == 'X') {
+        continue;
+        
+      }
+      moves.add(new int[] {row, col});
+    }
+    return moves;
   }
 }
