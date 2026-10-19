@@ -155,6 +155,37 @@ public class Practice {
    * @return true if there is a two-way connection between v1 and v2, false otherwise
    */
   public static <T> boolean twoWay(Vertex<T> v1, Vertex<T> v2) {
+    boolean connectionV1 = checkConnection(v1, v2);
+    boolean connectionV2 = checkConnection(v2, v1);
+
+    
+if (connectionV1 == true && connectionV2 == true) {
+  return true;
+}
+    return false;
+  }
+
+  private static <T> boolean checkConnection(Vertex<T> starting, Vertex<T> end) {
+    if (starting == null || end == null) return false;
+    if (starting == end) {return true;}
+    Set<Vertex<?>> connections = new HashSet<>();
+    return checkConnection(connections, starting, end);
+
+    
+
+
+  }
+
+  private static <T> boolean checkConnection( Set<Vertex<?>> connections, Vertex<T> starting, Vertex<T> end) {
+    if (connections.contains(starting)) {return false;}
+    if(starting == end) {return true;}
+    if(starting == null || end == null) return false;
+    connections.add(starting);
+    for(Vertex<T> vertex : starting.neighbors) {
+      if (checkConnection(connections, vertex, end)) {
+        return true;
+      } ;
+    }
     return false;
   }
 
@@ -171,6 +202,23 @@ public class Practice {
    * @return whether there exists a valid positive path from starting to ending
    */
   public static boolean positivePathExists(Map<Integer, Set<Integer>> graph, int starting, int ending) {
+    if (starting <= 0 || ending <= 0 || !graph.containsKey(starting) || !graph.containsKey(ending)) return false;
+    Set<Integer> visited = new HashSet<>();
+    
+    return positivePathExists(graph, visited, starting, ending);
+  }
+
+  private static boolean positivePathExists(Map<Integer, Set<Integer>> graph, Set<Integer> visited, int start, int end) {
+    if (start <= 0) return false;
+    if (start == end) return true;
+    if (visited.contains(start)) return false;
+    visited.add(start);
+
+    for(Integer neighbor : graph.get(start)) {
+      if(positivePathExists(graph, visited, neighbor, end)) {
+        return true;
+      }
+    }
     return false;
   }
 
